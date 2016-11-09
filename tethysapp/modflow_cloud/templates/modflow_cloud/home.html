@@ -1,0 +1,23 @@
+{% extends "modflow_cloud/base.html" %}
+
+{% block app_content %}
+  <h1>Welcome!</h1>
+  <p>This app stores all the MODFLOW data from Hyrdoshare.com</p>
+  <p>The Data tab contains a list of MODFLOW data.</p>
+  <p>The Map tab visually presents MODFLOW data.</p>
+  {{a}}
+  <div id="author"> </div>
+{% endblock %}
+
+{% block app_actions %}
+  <a href="" class="btn btn-default">Next</a>
+  <a href="" class="btn btn-default">Back</a>
+{% endblock %}
+
+{% block app_navigation_items %}
+  <li class="active"><a href="{% url 'modflow_cloud:home' %}">Home</a></li>
+  <li><a href="{% url 'modflow_cloud:map' %}">Map</a></li>
+  <li><a href="{% url 'modflow_cloud:data' %}">Data</a></li>
+  <!--<li><a href="{% url 'modflow_cloud:info' %}">Info</a></li> -->
+{% endblock %}
+

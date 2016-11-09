@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+
+{% extends "modflow_cloud/base.html" %}
+
+{% block app_navigation_items %}
+  <li><a href="{% url 'modflow_cloud:home' %}">Home</a></li>
+  <li class="active"><a href="{% url 'modflow_cloud:map' %}">Map</a></li>
+  <li><a href="{% url 'modflow_cloud:data' %}">Data</a></li>
+  <!--<li><a href="{% url 'modflow_cloud:info' %}">Info</a></li> -->
+{% endblock %}
+
+{% block app_content %}
+  <h1>Map</h1>
+  <div id="map" style="height: 100%; width: 100%;"></div>
+{% endblock %}
+
+{% load staticfiles %}
+
+{% block content_dependent_styles %}
+  {{ block.super }}
+  <link href="{% static 'my_first_app/css/map.css' %}" rel="stylesheet"/>
+{% endblock %}

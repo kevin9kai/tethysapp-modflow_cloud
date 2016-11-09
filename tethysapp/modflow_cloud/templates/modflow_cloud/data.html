@@ -1,0 +1,18 @@
+{% extends "modflow_cloud/base.html" %}
+
+{% block app_content %}
+<h2>MODFLOW data</h2>
+<p>Below is a list of groundwater models</p>
+{{ html |safe}}
+{{ test }}
+<p><a href="https://www.hydroshare.org/resource/757e03c8ccf643569c1ff9538a509a7b/">My MODFLOW Model</a></p>
+
+{% endblock %}
+
+
+{% block app_navigation_items %}
+  <li><a href="{% url 'modflow_cloud:home' %}">Home</a></li>
+  <li><a href="{% url 'modflow_cloud:map' %}">Map</a></li>
+  <li class="active"><a href="{% url 'modflow_cloud:data' %}">Data</a></li>
+  <!--<li><a href="{% url 'modflow_cloud:info' %}">Info</a></li> -->
+{% endblock %}

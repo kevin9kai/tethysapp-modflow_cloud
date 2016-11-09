@@ -1,0 +1,15 @@
+{% extends "modflow_cloud/base.html" %}
+
+{% block app_content %}
+  <h2>Information about Modflow Cloud</h2>
+  <p>Creator: </p>
+  <p>Date: 17 Oct. 2016 </p>
+  <p>Location: BYU </p>
+{% endblock %}
+
+{% block app_navigation_items %}
+  <li><a href="{% url 'modflow_cloud:home' %}">Home</a></li>
+  <li><a href="{% url 'modflow_cloud:map' %}">Map</a></li>
+  <li><a href="{% url 'modflow_cloud:data' %}">Data</a></li>
+  <li class="active"><a href="{% url 'modflow_cloud:info' %}">Info</a></li>
+{% endblock %}
