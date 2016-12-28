@@ -10,7 +10,6 @@ window.location = '/apps/modflow-cloud/download-hs-res/?my_res_id=' + res_id;
 
 //window.location is browser's location. So where it is.
 
-
 }
 
 

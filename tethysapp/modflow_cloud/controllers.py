@@ -84,35 +84,77 @@ def map(request):
 
         except Exception, e:
             pass
+        try:
+            box = dict['rdf:RDF']['rdf:Description'][0]['dc:coverage']['dcterms:box']['rdf:value']
+            # ['rdf:Description'][0]['dc:coverage'][0]['dcterms:box']['rdf:value']
+            # ^From the dictionary I pull out the values I need or the data from the "coverage" part of the model
+            list_points = box.split('; ')
+            # ^ splits up box to produce a list containing: northlimit, eastlimit, southlimit, westlimit, units
+            #   and porjection.
+            temp_dict = {}  # creates an empty dictionary
+            for l in list_points:
+                temp_list = l.split('=')  # splits up the list even further into name and value ex: northlimit, 40.5033
+                # print temp_list
+                temp_dict[temp_list[0]] = temp_list[1]
+            res_info = {}
+            res_info["resource_id"] = resource['resource_id']
+            res_info["box"] = temp_dict
+            res_info_list.append(res_info)
+            print res_info
+
+        except Exception, e:
+            pass
+        try: # Checks to see if points work
+            box = dict['rdf:RDF']['rdf:Description'][0]['dc:coverage']['dcterms:point']['rdf:value']
+            # ['rdf:Description'][0]['dc:coverage'][0]['dcterms:box']['rdf:value']
+            # ^From the dictionary I pull out the values I need or the data from the "coverage" part of the model
+            list_points = box.split('; ')
+            # ^ splits up box to produce a list containing: northlimit, eastlimit, southlimit, westlimit, units
+            #   and porjection.
+            temp_dict = {}  # creates an empty dictionary
+            for l in list_points:
+                temp_list = l.split('=')  # splits up the list even further into name and value ex: northlimit, 40.5033
+                # print temp_list
+                temp_dict[temp_list[0]] = temp_list[1]
+            res_info = {}
+            res_info["resource_id"] = resource['resource_id']
+            res_info["point"] = temp_dict
+            res_info_list.append(res_info)
+            print res_info
+
+        except Exception, e:
+            pass
         i += 1
 
 
-    print "length of line"
-    print len(res_info_list)
     print "These are the MODFLOW models"
     i=0
     while i< len(res_info_list):
         print res_info_list[i]["resource_id"]
-        print res_info_list[i]["box"]["name"]
-        print res_info_list[i]["box"]["projection"]
-        print res_info_list[i]["box"]["northlimit"]
-        print res_info_list[i]["box"]["southlimit"]
-        print res_info_list[i]["box"]["eastlimit"]
-        print res_info_list[i]["box"]["westlimit"]
+        try:
+            print res_info_list[i]["box"]["name"]
+        except Exception, e:
+            pass
+        try:
+            print res_info_list[i]["box"]["northlimit"]
+            print res_info_list[i]["box"]["southlimit"]
+            print res_info_list[i]["box"]["eastlimit"]
+            print res_info_list[i]["box"]["westlimit"]
+        except Exception,e:
+            pass
+        try:
+            print res_info_list[i]["point"]["east"]
+            print res_info_list[i]["point"]["north"]
+        except Exception,e:
+            pass
+        i+=1
 
-    # print "This the entire list"
-    # print res_info_list
 
-    # Define GeoJSON layer
-    ymax = float(res_info_list[0]["box"]["northlimit"])
-    ymin = float(res_info_list[0]["box"]["southlimit"])
-    xmax = float(res_info_list[0]["box"]["eastlimit"])
-    xmin = float(res_info_list[0]["box"]["westlimit"])
     # Changing the projection for each value
     inProj = Proj(init='epsg:4326')
     outProj = Proj(init='epsg:3857')
-    xmax, ymax = transform(inProj, outProj, xmax, ymax)
-    xmin, ymin = transform(inProj, outProj, xmin, ymin)
+    # xmax, ymax = transform(inProj, outProj, xmax, ymax)
+    # xmin, ymin = transform(inProj, outProj, xmin, ymin)
 
     #gets the projection
     # projection = res_info_list[0]["box"]["projection"]  # returns 'WGS 84 EPSG:4326'
@@ -132,26 +174,41 @@ def map(request):
     len_res_list = len(res_info_list)
     print "length of res_info_list: %d" % len_res_list
 
-
+    #This is a loop that sets up all the objects in the features.
     features = []
     i=0
-    print i
-    while i < len_res_list:
-        ymax_coor=(res_info_list[i]["box"]["northlimit"])
-        ymin_coor=(res_info_list[i]["box"]["southlimit"])
-        xmax_coor=(res_info_list[i]["box"]["eastlimit"])
-        xmin_coor=(res_info_list[i]["box"]["westlimit"])
-        top_right = transform(inProj, outProj, xmax_coor, ymax_coor)
-        top_left = transform(inProj, outProj, xmax_coor, ymin_coor)
-        bot_right = transform(inProj, outProj, xmin_coor, ymax_coor)
-        bot_left = transform(inProj, outProj, xmin_coor, ymin_coor)
-        features.append({
-            'type': 'Feature',  # This produces the box
-            'geometry': {
-                'type': 'Polygon',
-                'coordinates': [[top_right, bot_right, bot_left, top_left]]
-            }
-        })
+    while i < len_res_list: #This is for adding box shapes to features
+        try:
+            ymax_coor=(res_info_list[i]["box"]["northlimit"])
+            ymin_coor=(res_info_list[i]["box"]["southlimit"])
+            xmax_coor=(res_info_list[i]["box"]["eastlimit"])
+            xmin_coor=(res_info_list[i]["box"]["westlimit"])
+            top_right = transform(inProj, outProj, xmax_coor, ymax_coor)
+            top_left = transform(inProj, outProj, xmax_coor, ymin_coor)
+            bot_right = transform(inProj, outProj, xmin_coor, ymax_coor)
+            bot_left = transform(inProj, outProj, xmin_coor, ymin_coor)
+            features.append({
+                'type': 'Feature',  # This produces the box
+                'geometry': {
+                    'type': 'Polygon',
+                    'coordinates': [[top_right, bot_right, bot_left, top_left]]
+                }
+            })
+        except Exception, e: #This is for adding point shapes to features
+            pass
+        try:
+            east = res_info_list[i]["point"]["east"]
+            north = res_info_list[i]["point"]["north"]
+            point = transform(inProj, outProj, east, north)
+            features.append({
+                'type': 'Feature',  # This produces the box
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': point
+                }
+            })
+        except Exception, e:
+            pass
         i += 1
 
     #creates a random point for the map
