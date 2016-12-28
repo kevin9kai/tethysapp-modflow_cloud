@@ -10,6 +10,7 @@
 </html>
 
 {% extends "modflow_cloud/base.html" %}
+{% load tethys_gizmos %}
 
 {% block app_navigation_items %}
   <li><a href="{% url 'modflow_cloud:home' %}">Home</a></li>
@@ -19,8 +20,12 @@
 {% endblock %}
 
 {% block app_content %}
-  <h1>Map</h1>
-  <div id="map" style="height: 100%; width: 100%;"></div>
+  <!--<h1>Map</h1>-->
+  <!--<div id="map" style="height: 100%; width: 100%;"></div>-->
+
+<!-- This is adding the gizmo map-->
+{% gizmo map_view map_view_options %}
+
 {% endblock %}
 
 {% load staticfiles %}
@@ -29,3 +34,5 @@
   {{ block.super }}
   <link href="{% static 'my_first_app/css/map.css' %}" rel="stylesheet"/>
 {% endblock %}
+
+

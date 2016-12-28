@@ -1,5 +1,7 @@
 from tethys_sdk.base import TethysAppBase, url_map_maker
-
+#----------
+from tethys_sdk.stores import PersistentStore
+#----------
 
 class ModflowCloud(TethysAppBase):
     """
@@ -35,6 +37,18 @@ class ModflowCloud(TethysAppBase):
                     UrlMap(name='data',
                            url='data',
                            controller='modflow_cloud.controllers.data'),
+                    UrlMap(name='temp',
+                           url='temp',
+                           controller='modflow_cloud.controllers.temp'),
+                    UrlMap(name='download_hs_res',
+                           url='download-hs-res',
+                           controller='modflow_cloud.controllers.download_hs_res'),
+                    #Here from data.js it goes into download-hs-res url because that is
+                    #where the window.location is bringing the user to.
         )
 
         return url_maps
+
+    #this is just from the tutorial-----------------------------------------------
+
+    #------------------------------------------------------------------------------

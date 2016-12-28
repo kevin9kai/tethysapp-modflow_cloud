@@ -1,11 +1,22 @@
 {% extends "modflow_cloud/base.html" %}
 
+{% load staticfiles %}
+{% load tethys_gizmos %}
+
 {% block app_content %}
 <h2>MODFLOW data</h2>
 <p>Below is a list of groundwater models</p>
 {{ html |safe}}
-{{ test }}
-<p><a href="https://www.hydroshare.org/resource/757e03c8ccf643569c1ff9538a509a7b/">My MODFLOW Model</a></p>
+<!--{{ test }}-->
+
+
+
+<form id='parameters-form' action="{% url 'modflow_cloud:temp' %}" method="post">
+{{ temp }}
+
+</form>
+{% gizmo button submit_button %}
+
 
 {% endblock %}
 
@@ -15,4 +26,10 @@
   <li><a href="{% url 'modflow_cloud:map' %}">Map</a></li>
   <li class="active"><a href="{% url 'modflow_cloud:data' %}">Data</a></li>
   <!--<li><a href="{% url 'modflow_cloud:info' %}">Info</a></li> -->
+{% endblock %}
+
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="{% static 'modflow_cloud/js/data.js' %}" type="text/javascript"></script>
 {% endblock %}
